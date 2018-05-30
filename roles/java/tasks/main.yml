@@ -1,0 +1,6 @@
+---
+ - name: Installing open JDK
+   become: yes
+   yum:
+    name: java-1.8.0-openjdk-devel.x86_64
+    state: present

@@ -1,0 +1,14 @@
+---
+ - name: Getting the spark url
+   become: yes
+   get_url:
+       url: http://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.rpm
+       dest: /tmp/scala-2.11.8.rpm
+
+
+ - name: Installing scala
+   become: yes
+   yum:
+     name: /tmp/scala-2.11.8.rpm
+     state: present
+ 

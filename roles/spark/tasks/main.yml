@@ -1,0 +1,21 @@
+---
+ - name: Creating spark directory
+   become: yes
+   file:
+     path: /usr/local/spark
+     state: directory
+
+
+ - name: Getting spark URL
+   become: yes
+   get_url:
+       url: http://mirror.stjschools.org/public/apache/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+       dest: /usr/local/spark/spark-2.3.0-bin-hadoop2.7.tgz
+
+ - name: Extracting the spark file
+   become: yes
+   shell: tar -xvf spark-2.3.0-bin-hadoop2.7.tgz
+   args:
+     chdir: /usr/local/spark/
+
+
