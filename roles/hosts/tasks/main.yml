@@ -1,0 +1,8 @@
+---
+ - name: Add IP to hosts
+   become: yes
+   blockinfile:
+       path: /etc/hosts
+       block: |
+          172.31.47.109 Master
+          172.31.43.54 Node

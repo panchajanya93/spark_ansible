@@ -1,0 +1,7 @@
+---
+ - hosts: master_node
+   gather_facts: yes
+   remote_user: panchu
+   become: yes
+   roles:
+     - master

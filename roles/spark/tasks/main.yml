@@ -18,4 +18,16 @@
    args:
      chdir: /usr/local/spark/
 
+ - name: set spark path 
+   become: yes
+   lineinfile:
+      path: /home/ec2-user/.bashrc
+      line: 'export PATH=$PATH:/usr/local/spark/bin'
+
+ - name: sourcing .bashrc file
+   become: yes
+   shell: source ~/.bashrc
+   args:
+     chdir: /home/ec2-user
+
 
