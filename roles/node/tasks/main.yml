@@ -1,0 +1,39 @@
+---
+ - name: Creating spark directory
+   become: yes
+   file:
+     path: /usr/local/spark
+     state: directory
+
+
+ - name: Getting spark URL
+   become: yes
+   get_url:
+       url: http://mirror.stjschools.org/public/apache/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+       dest: /usr/local/spark/spark-2.3.0-bin-hadoop2.7.tgz
+
+ - name: Extracting the spark file
+   become: yes
+   shell: tar -xvf spark-2.3.0-bin-hadoop2.7.tgz
+   args:
+     chdir: /usr/local/spark/
+
+ - name: set spark path
+   become: yes
+   lineinfile:
+      path: /home/panchu/.bashrc
+      line: 'export PATH=$PATH:/usr/local/spark/bin'
+
+ - name: sourcing .bashrc file
+   become: yes
+   shell: source ~/.bashrc
+   args:
+     chdir: /home/panchu
+
+ - name: Remove localhost
+   become: yes
+   lineinfile:
+      dest: /usr/local/spark/spark-2.3.0-bin-hadoop2.7/conf/slaves.template
+      regexp: "localhost"
+      state: absent
+

@@ -4,5 +4,5 @@
    blockinfile:
        path: /etc/hosts
        block: |
-          172.31.47.109 Master
-          172.31.43.54 Node
+          10.1.53.151   master
+          10.1.53.96    slave

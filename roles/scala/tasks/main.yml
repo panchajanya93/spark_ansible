@@ -1,5 +1,5 @@
 ---
- - name: Getting the spark url
+ - name: Getting the scala url
    become: yes
    get_url:
        url: http://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.rpm

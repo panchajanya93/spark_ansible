@@ -4,4 +4,10 @@
    remote_user: panchu
    become: yes
    roles:
-     - master
+     - hosts
+     - java
+     - scala
+     - spark
+
+
+    
