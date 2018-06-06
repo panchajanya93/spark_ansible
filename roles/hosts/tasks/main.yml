@@ -1,8 +1,0 @@
----
- - name: Add IP to hosts
-   become: yes
-   blockinfile:
-       path: /etc/hosts
-       block: |
-          10.1.53.151   master
-          10.1.53.96    slave

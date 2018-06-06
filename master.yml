@@ -4,7 +4,6 @@
    remote_user: panchu
    become: yes
    roles:
-     - hosts
      - java
      - scala
      - spark

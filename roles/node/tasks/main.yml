@@ -18,11 +18,17 @@
    args:
      chdir: /usr/local/spark/
 
- - name: set spark path
+ - name: set spark path to SPARK_HOME
    become: yes
    lineinfile:
       path: /home/panchu/.bashrc
-      line: 'export PATH=$PATH:/usr/local/spark/bin'
+      line: 'export SPARK_HOME=/usr/local/spark/spark-2.3.0-bin-hadoop2.7'
+
+ - name: Export SPARK_HOME to bashrc
+   become: yes
+   lineinfile:
+      path: /home/panchu/.bashrc
+      line: 'export PATH=$PATH:$SPARK_HOME/bin'
 
  - name: sourcing .bashrc file
    become: yes

@@ -18,11 +18,17 @@
    args:
      chdir: /usr/local/spark/
 
- - name: set spark path 
+ - name: set spark path to SPARK_HOME 
    become: yes
    lineinfile:
       path: /home/panchu/.bashrc
-      line: 'export PATH=$PATH:/usr/local/spark/bin'
+      line: 'export SPARK_HOME=/usr/local/spark/spark-2.3.0-bin-hadoop2.7'
+
+ - name: Export SPARK_HOME to bashrc
+   become: yes
+   lineinfile:
+      path: /home/panchu/.bashrc
+      line: 'export PATH=$PATH:$SPARK_HOME/bin'
 
  - name: sourcing .bashrc file
    become: yes
@@ -31,17 +37,12 @@
      chdir: /home/panchu
 
 
-# - name: copying the file
-#   become: yes
-#   copy:
-#     src: /usr/local/spark/spark-2.3.0-bin-hadoop2.7/conf/spark-env.sh.template
-#     dest: /usr/local/spark/spark-2.3.0-bin-hadoop2.7/conf/spark-env.sh
 
  - name: Adding spark master host
    become: yes
    lineinfile:
       path: /usr/local/spark/spark-2.3.0-bin-hadoop2.7/conf/spark-env.sh.template
-      line: export SPARK_MASTER_HOST="10.1.53.151"
+      line: export SPARK_MASTER_HOST= "{{ groups['master_node'] }}"
 
  - name: Editing the file
    become: yes
@@ -56,11 +57,6 @@
      line: spark.master spark://Master:7077
 
 
-# - name: Copying the slave file
-#   become: yes
-#   copy:
-#     src: /usr/local/spark/spark-2.3.0-bin-hadoop2.7/conf/slaves.template
-#     dest: /usr/local/spark/spark-2.3.0-bin-hadoop2.7/conf/slaves
 
  - name: Remove localhost
    become: yes
@@ -80,9 +76,16 @@
    blockinfile:
      path: /usr/local/spark/spark-2.3.0-bin-hadoop2.7/conf/slaves
      block: |
-        master
-        slave
+        "{{ groups['slaves_node'] }}"
+        
+        
+ - name: Variable registering through shell command
+   shell: "echo $HOSTNAME"
+   register: current_hostname
 
+ - name: setting variable name
+   set_fact:
+   string_to_echo: "{{ current_hostname.stdout }}"
 
  - name: Start the master
    become: yes
@@ -93,9 +96,9 @@
 
  - name: Start the slave
    become: yes
-   shell: start-slave.sh spark://spark-master.pj:7077
+   shell: start-slave.sh spark://{{ current_hostname.stdout }}:7077
    args:
-     chdir: /usr/local/spark/spark-2.3.0-bin-hadoop2.7/sbin
+      chdir: /usr/local/spark/spark-2.3.0-bin-hadoop2.7/sbin
 
 
  - name: To check deamons on master and slaves started
